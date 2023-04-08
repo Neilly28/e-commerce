@@ -25,11 +25,12 @@ const Products = ({ cat, filters, sort }) => {
             ? `http://localhost:5000/api/products?category=${cat}`
             : "http://localhost:5000/api/products"
         );
-        console.log(response.data);
+
         setProducts(response.data);
       } catch (err) {}
     };
     getProducts();
+    console.log(products);
   }, [cat]);
 
   useEffect(() => {
@@ -43,11 +44,29 @@ const Products = ({ cat, filters, sort }) => {
       );
   }, [products, cat, filters]);
 
+  useEffect(() => {
+    if (sort === "newest") {
+      setFilteredProducts((prev) =>
+        [...prev].sort((a, b) => a.createdAt - b.createdAt)
+      );
+    } else if (sort === "ascending") {
+      setFilteredProducts((prev) =>
+        [...prev].sort((a, b) => a.price - b.price)
+      );
+    } else {
+      setFilteredProducts((prev) =>
+        [...prev].sort((a, b) => b.price - a.price)
+      );
+    }
+  }, [sort]);
+
   return (
     <Container>
-      {filteredProducts.map((item) => (
-        <Product item={item} key={item.id} />
-      ))}
+      {cat
+        ? filteredProducts.map((item) => <Product item={item} key={item.id} />)
+        : products
+            .slice(0, 8)
+            .map((item) => <Product item={item} key={item.id} />)}
     </Container>
   );
 };
