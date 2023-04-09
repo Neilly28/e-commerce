@@ -20,6 +20,7 @@ const Wrapper = styled.div`
 const ImgContainer = styled.div`
   flex: 1;
 `;
+
 const Image = styled.img`
   width: 50%;
   /* height: 90vh; */
@@ -38,6 +39,7 @@ const Title = styled.h1`
 const Description = styled.p`
   margin: 20px 0;
 `;
+
 const Price = styled.span`
   font-weight: 100;
   font-size: 40px;
@@ -121,6 +123,8 @@ const Product = () => {
   const [quantity, setQuantity] = useState(1);
   const [color, setColor] = useState("");
   const [size, setSize] = useState("");
+
+  // useDispatch is for changing states using redux
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -147,8 +151,9 @@ const Product = () => {
   };
 
   const handleSubmit = () => {
-    // update cart
+    // update cart using dispatch
     dispatch(addProduct({ ...product, quantity, color, size }));
+    // dispatch(addProduct());
   };
 
   return (
