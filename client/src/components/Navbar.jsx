@@ -2,8 +2,9 @@ import { Badge } from "@material-ui/core";
 import { Search, ShoppingCartOutlined } from "@material-ui/icons";
 import React from "react";
 import styled from "styled-components";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { logout } from "../redux/userSlice";
 
 const Container = styled.div`
   height: 120px;
@@ -62,10 +63,23 @@ const MenuItem = styled.div`
   margin-left: 25px;
 `;
 
+const Button = styled.button`
+  cursor: pointer;
+`;
+
 const Navbar = () => {
   // useSelector is needed to access states
   const quantity = useSelector((state) => state.cart.quantity);
   console.log(quantity);
+
+  const currentUser = useSelector((state) => state.user.currentUser);
+
+  // useDispatch is needed to change states
+  const dispatch = useDispatch();
+
+  const handleLogout = () => {
+    dispatch(logout());
+  };
 
   return (
     <Container>
@@ -83,8 +97,13 @@ const Navbar = () => {
         <Right>
           <MenuItem>REGISTER</MenuItem>
           <Link to="/login">
-            <MenuItem>SIGN IN</MenuItem>
+            <MenuItem>
+              {currentUser ? `Hello,${currentUser.username}` : "Sign In"}
+            </MenuItem>
           </Link>
+          <Button onClick={handleLogout}>
+            <MenuItem>{currentUser ? `Logout` : "Sign In"}</MenuItem>
+          </Button>
           <Link to="/cart">
             <MenuItem>
               <Badge badgeContent={quantity} color="primary">
